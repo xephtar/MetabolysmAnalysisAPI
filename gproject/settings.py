@@ -87,11 +87,11 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': 'wuwahbyt',
+        'NAME': '',
 
-        'USER': 'wuwahbyt',
+        'USER': '',
 
-        'PASSWORD': 'iFqkH0wd3wPg917rKk_d5AEDk2UXpc86',
+        'PASSWORD': '',
 
         'HOST': 'manny.db.elephantsql.com',
 
