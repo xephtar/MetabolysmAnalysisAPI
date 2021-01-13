@@ -33,3 +33,4 @@ class Article(models.Model):
     doi = models.CharField(max_length=500, null=True)
     authors = models.ManyToManyField(Author)
     metabolities = models.ManyToManyField(Metabolity)
+    tagged = models.JSONField(null=True)

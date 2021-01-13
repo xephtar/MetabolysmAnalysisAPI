@@ -10,8 +10,13 @@ data = json.load(f)
 reactions = data['reactions']
 i = 0
 for index, m in enumerate(reactions):
+    if index < 6302:
+        continue
     r = Reaction.objects.get_or_create(reaction_id=m['id'], name=m['name'], notes=m['notes'],
                                        upper_bound=m['upper_bound'],
                                        lower_bound=m['lower_bound'], gene_reaction_rule=m['gene_reaction_rule'])
     for met in m['metabolites']:
-        r[0].metabolities.add(Metabolity.objects.get(metabolity_id=met))
+        try:
+            r[0].metabolities.add(Metabolity.objects.get(metabolity_id=met))
+        except:
+            print("none")

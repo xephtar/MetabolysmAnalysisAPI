@@ -2,7 +2,7 @@ import requests
 import xmltodict, json
 from articles.models import Article, Author
 
-url = "https://www.ebi.ac.uk/europepmc/webservices/rest/searchPOST?query=headaches&resultType=core&pageSize=1000"
+url = "https://www.ebi.ac.uk/europepmc/webservices/rest/searchPOST?query=cancer&resultType=core&pageSize=1000"
 
 payload = {}
 files = {}
