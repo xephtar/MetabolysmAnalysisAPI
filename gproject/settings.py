@@ -80,6 +80,10 @@ WSGI_APPLICATION = 'gproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+from decouple import config
+
+DATABASE_NAME = config('DATABASE_NAME')
+DATABASE_PASSWORD = config('DATABASE_PASSWORD')
 
 DATABASES = {
 
@@ -87,11 +91,11 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': '',
+        'NAME': DATABASE_NAME,
 
-        'USER': '',
+        'USER': DATABASE_NAME,
 
-        'PASSWORD': '',
+        'PASSWORD': DATABASE_PASSWORD,
 
         'HOST': 'manny.db.elephantsql.com',
 

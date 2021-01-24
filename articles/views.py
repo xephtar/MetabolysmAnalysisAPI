@@ -6,8 +6,8 @@ from django.shortcuts import render
 # ViewSets define the view behavior.
 from rest_framework import viewsets
 
-from .models import Article, Author, Metabolity, Reaction
-from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializer, ReactionSerializer
+from .models import Article, Author, Metabolity, Reaction, Disease
+from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializer, ReactionSerializer, DiseaseSerializer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -18,6 +18,11 @@ class ArticleViewSet(viewsets.ModelViewSet):
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+
+class DiseaseViewSet(viewsets.ModelViewSet):
+    queryset = Disease.objects.all()
+    serializer_class = DiseaseSerializer
 
 
 class MetabolityViewSet(viewsets.ModelViewSet):

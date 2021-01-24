@@ -2,6 +2,15 @@ from django.db import models
 
 
 # Create your models here.
+
+class TimeStampMixin(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
 class Author(models.Model):
     full_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
@@ -14,6 +23,15 @@ class Metabolity(models.Model):
     name = models.CharField(max_length=500)
     compartment = models.CharField(max_length=500, null=True)
     notes = models.JSONField(null=True)
+
+
+class Disease(TimeStampMixin):
+    id = models.AutoField(db_column='id', primary_key=True)
+    disease_id = models.CharField(max_length=500, unique=True)
+    name = models.CharField(max_length=500)
+    type = models.CharField(max_length=500, null=True)
+    class_of = models.CharField(max_length=500, null=True)
+    semantic_type = models.CharField(max_length=500, null=True)
 
 
 class Reaction(models.Model):
