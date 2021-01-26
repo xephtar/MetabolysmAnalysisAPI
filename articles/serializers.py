@@ -15,7 +15,7 @@ class DiseaseSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Disease
-        fields = ['disease_id', 'name', 'type', 'class_of', "semantic_type"]
+        fields = ['disease_id', 'name', 'type', 'class_of', "semantic_type", "url"]
 
 
 class MetabolitySerializer(serializers.HyperlinkedModelSerializer):
@@ -37,7 +37,7 @@ class ReactionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Reaction
-        fields = ['reaction_id', 'name', 'metabolities', 'notes', 'lower_bound', 'upper_bound', 'gene_reaction_rule']
+        fields = ['reaction_id', 'name', 'metabolities', 'notes', 'lower_bound', 'upper_bound', 'gene_reaction_rule', "url"]
 
 
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
@@ -46,4 +46,5 @@ class ArticleSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities']
+        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', "url"]
+        ordering = ['-id']
