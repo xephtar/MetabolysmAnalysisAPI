@@ -43,8 +43,8 @@ class ReactionSerializer(serializers.HyperlinkedModelSerializer):
 class ArticleSerializer(serializers.HyperlinkedModelSerializer):
     authors = AuthorSerializer(many=True, read_only=True)
     metabolities = MetabolitySerializer(many=True, read_only=True)
+    diseases = DiseaseSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', "url"]
-        ordering = ['-id']
+        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', 'diseases', 'url']
