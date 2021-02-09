@@ -5,11 +5,12 @@ all_diseases = Disease.objects.all()
 
 i = 0
 for ar in all_articles:
-    abstractText = ar.abstract_text.lower()
-    for me in all_diseases:
-        nameOfDisease = me.name.lower()
-        if nameOfDisease != "":
-            print(nameOfDisease)
-            if nameOfDisease in abstractText:
-                ar.diseases.add(me)
+    if i > 2565:
+        abstractText = ar.abstract_text.lower()
+        for me in all_diseases:
+            nameOfDisease = me.name.lower()
+            if nameOfDisease != "":
+                print(nameOfDisease)
+                if nameOfDisease in abstractText:
+                    ar.diseases.add(me)
     i += 1

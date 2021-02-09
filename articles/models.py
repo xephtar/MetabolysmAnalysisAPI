@@ -25,6 +25,11 @@ class Metabolity(models.Model):
     notes = models.JSONField(null=True)
 
 
+class Pathway(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True)
+    name = models.CharField(max_length=500, unique=True)
+
+
 class Disease(TimeStampMixin):
     id = models.AutoField(db_column='id', primary_key=True)
     disease_id = models.CharField(max_length=500, unique=True)
