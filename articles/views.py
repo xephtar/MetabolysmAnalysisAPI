@@ -7,9 +7,9 @@ from rest_framework import viewsets, filters
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Article, Author, Metabolity, Reaction, Disease
+from .models import Article, Author, Metabolity, Reaction, Disease, Pathway
 from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializer, ReactionSerializer, \
-    DiseaseSerializer
+    DiseaseSerializer, PathwaySerializer
 
 
 def addTwoNumber(a, b):
@@ -32,6 +32,13 @@ class ArticleViewSet(viewsets.ModelViewSet):
 class AuthorViewSet(viewsets.ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
+
+
+class PathwayViewSet(viewsets.ModelViewSet):
+    search_fields = ['name']
+    filter_backends = (filters.SearchFilter,)
+    queryset = Pathway.objects.all()
+    serializer_class = PathwaySerializer
 
 
 class DiseaseViewSet(viewsets.ModelViewSet):

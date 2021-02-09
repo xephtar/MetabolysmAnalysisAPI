@@ -1,7 +1,7 @@
 # Serializers define the API representation.
 from rest_framework import serializers
 
-from .models import Article, Author, Metabolity, Reaction, Disease
+from .models import Article, Author, Metabolity, Reaction, Disease, Pathway
 
 
 class AuthorSerializer(serializers.HyperlinkedModelSerializer):
@@ -9,6 +9,13 @@ class AuthorSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Author
         fields = ["full_name", "first_name", "last_name", "initials", "url"]
+
+
+class PathwaySerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Pathway
+        fields = ['id', 'name', 'url']
 
 
 class DiseaseSerializer(serializers.HyperlinkedModelSerializer):
