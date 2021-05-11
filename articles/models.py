@@ -51,7 +51,7 @@ class Reaction(TimeStampMixin):
 
 
 class Article(TimeStampMixin):
-    abstract_text = models.CharField(max_length=5000, null=True)
+    abstract_text = models.CharField(max_length=20000, null=True)
     pub_date = models.DateField()
     name = models.CharField(max_length=500)
     doi = models.CharField(max_length=500, null=True)

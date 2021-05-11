@@ -1,0 +1,4 @@
+articleNum: 4627
+
+fulltext indexing
+elasticsearch

@@ -19,7 +19,7 @@ from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializ
 class ArticleViewSet(viewsets.ModelViewSet):
     search_fields = ['abstract_text', 'diseases__name']
     filter_backends = (filters.SearchFilter,)
-    queryset = Article.objects.all().order_by('pk')
+    queryset = Article.objects.all().order_by('-pk')
     serializer_class = ArticleSerializer
 
     # @action(methods=['get'], detail=False, serializer_class=ArticleSerializer)

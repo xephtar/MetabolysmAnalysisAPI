@@ -11,5 +11,5 @@ for ar in all_articles:
         if nameOfPathway != "":
             print(nameOfPathway)
             if nameOfPathway in abstractText:
-                ar.pathways.add(me)
+                ar.pathways.get_or_create(me)
     i += 1

@@ -3,6 +3,7 @@
 
 ### Data Files ###
 *xml.gz
+*xml
 
 ### Django ###
 *.log
