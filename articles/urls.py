@@ -18,7 +18,8 @@ from django.urls import path, include
 from rest_framework import routers
 
 # Routers provide an easy way of automatically determining the URL conf.
-from .views import ArticleViewSet, AuthorViewSet, MetabolityViewSet, ReactionViewSet, DiseaseViewSet, PathwayViewSet
+from .views import ArticleViewSet, AuthorViewSet, MetabolityViewSet, ReactionViewSet, DiseaseViewSet, PathwayViewSet, \
+    DiseasePathwaySearchViewSet
 
 router = routers.DefaultRouter()
 router.register(r'articles', ArticleViewSet, basename="article")
@@ -31,5 +32,6 @@ router.register(r'pathways', PathwayViewSet, basename="pathway")
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('', include(router.urls))
+    path('', include(router.urls)),
+    path('search/', DiseasePathwaySearchViewSet.as_view())
 ]

@@ -4,6 +4,7 @@
 ### Data Files ###
 *xml.gz
 *xml
+*xml.gz.txt
 
 ### Django ###
 *.log

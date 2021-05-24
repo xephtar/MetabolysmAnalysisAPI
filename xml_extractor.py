@@ -82,11 +82,13 @@ class MeshHandler(xml.sax.ContentHandler):
             day = '{:02d}'.format(now.day)
             day_month_year = '{}-{}-{}'.format(year, month, day)
             print(articleNum)
-            if articleNum > 6351:
+            try:
                 self.c.execute(
                     "INSERT INTO articles_article (abstract_text, pub_date, name, doi, created_at, updated_at, is_active) VALUES(%s, %s,%s, %s, %s, %s, true)",
                     (self.AbstractText, self.PubDate, self.ArticleTitle, self.doi, now, now))
                 self.conn.commit()
+            except Exception as inst:
+                print(inst)
 
             print('#################\n')
             self.ArticleTitle = ''
@@ -142,7 +144,7 @@ class MeshHandler(xml.sax.ContentHandler):
         self.c.close()
 
 
-MESH_FILE = "pubmed21n1046.xml.gz"
+MESH_FILE = "pubmed21n1039.xml.gz"
 
 
 def getMeshesInfo():

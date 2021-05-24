@@ -1,19 +1,12 @@
-import json
-
-from django.shortcuts import render
-
 # Create your views here.
 
 # ViewSets define the view behavior.
-from rest_framework import viewsets, filters, serializers
-from rest_framework.decorators import action
-from rest_framework.pagination import PageNumberPagination
+from rest_framework import viewsets, filters, mixins, generics
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import Article, Author, Metabolity, Reaction, Disease, Pathway
 from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializer, ReactionSerializer, \
-    DiseaseSerializer, PathwaySerializer
+    DiseaseSerializer, PathwaySerializer, DiseasePathwaySearchSeriailizer
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
@@ -68,3 +61,46 @@ class MetabolityViewSet(viewsets.ModelViewSet):
 class ReactionViewSet(viewsets.ModelViewSet):
     queryset = Reaction.objects.all()
     serializer_class = ReactionSerializer
+
+
+class DiseasePathwaySearchViewSet(mixins.ListModelMixin, generics.GenericAPIView):
+    serializer_class = DiseasePathwaySearchSeriailizer
+    queryset = ''
+
+    def get(self, request, *args, **kwargs):
+        disease_name = request.query_params.get('disease', '-1')
+        pathway_name = request.query_params.get('pathway', '-1')
+
+        pathways = Pathway.objects.filter(name__icontains=pathway_name).distinct()
+        diseases = Disease.objects.filter(name__icontains=disease_name).distinct()
+
+        serialized_pathways = PathwaySerializer(pathways, many=True,
+                                                context={'request': request}).data
+
+        serialized_diseases = DiseaseSerializer(diseases, many=True,
+                                                context={'request': request}).data
+
+        articlesWithPathway = Article.objects.filter(
+            pathways__in=pathways)
+        articlesWithDisease = Article.objects.filter(
+            diseases__in=diseases)
+
+        related_diseases = Disease.objects.filter(article__in=articlesWithPathway)
+        related_pathways = Pathway.objects.filter(article__in=articlesWithDisease)
+
+        serialized_pathways_data = PathwaySerializer(related_pathways, many=True,
+                                                     context={'request': request}).data
+        serialized_disease_data = DiseaseSerializer(related_diseases, many=True,
+                                                    context={'request': request}).data
+
+        res = {
+            'disease_info': {'tagged_article_count': len(articlesWithDisease),
+                             'diseases': {'count': len(serialized_diseases), 'results': serialized_diseases},
+                             'related_pathways': {'count': len(serialized_pathways_data),
+                                                  'results': serialized_pathways_data}},
+            'pathway_info': {'tagged_article_count': len(articlesWithPathway),
+                             'pathways': {'count': len(serialized_pathways), 'results': serialized_pathways},
+                             'related_diseases': {'count': len(serialized_disease_data),
+                                                  'results': serialized_disease_data}}}
+
+        return Response(data=res)
