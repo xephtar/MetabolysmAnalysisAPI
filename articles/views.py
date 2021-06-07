@@ -1,37 +1,30 @@
 # Create your views here.
 
 # ViewSets define the view behavior.
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from django.views.decorators.vary import vary_on_cookie
 from rest_framework import viewsets, filters, mixins, generics
 from rest_framework.response import Response
 
 from .models import Article, Author, Metabolity, Reaction, Disease, Pathway
 from .serializers import ArticleSerializer, AuthorSerializer, MetabolitySerializer, ReactionSerializer, \
     DiseaseSerializer, PathwaySerializer, DiseasePathwaySearchSeriailizer
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 class ArticleViewSet(viewsets.ModelViewSet):
     search_fields = ['abstract_text', 'diseases__name']
     filter_backends = (filters.SearchFilter,)
-    queryset = Article.objects.all().order_by('-pk')
+    queryset = Article.objects.prefetch_related('metabolities', 'authors', 'diseases', 'pathways').all()
     serializer_class = ArticleSerializer
 
-    # @action(methods=['get'], detail=False, serializer_class=ArticleSerializer)
-    # def findArticlesForGivenDiseaseName(self, request, **kwargs):
-    #     empty_params = []
-    #     for param in ['disease_name']:
-    #         if param not in request.data.keys():
-    #             empty_params.append({param: "This field should not be left empty."})
-    #
-    #     if len(empty_params) > 0:
-    #         raise serializers.ValidationError(empty_params)
-    #
-    #     disease_name = request.data['disease_name']
-    #     queryset = self.get_queryset().filter(diseases__name__contains=disease_name)
-    #     paginator = PageNumberPagination()
-    #     paginator.page_size = 5
-    #     result_page = paginator.paginate_queryset(queryset, request)
-    #     serializer = self.get_serializer(result_page, many=True)
-    #     return paginator.get_paginated_response(serializer.data)
+    @method_decorator(cache_page(CACHE_TTL))
+    def list(self, *args, **kwargs):
+        return super().list(*args, **kwargs)
 
 
 class AuthorViewSet(viewsets.ModelViewSet):

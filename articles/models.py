@@ -13,6 +13,7 @@ class TimeStampMixin(models.Model):
 
 
 class Author(TimeStampMixin):
+    id = models.AutoField(db_column='id', primary_key=True, db_index=True)
     full_name = models.CharField(max_length=50)
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -20,20 +21,20 @@ class Author(TimeStampMixin):
 
 
 class Metabolity(TimeStampMixin):
-    metabolity_id = models.CharField(max_length=500, primary_key=True)
+    metabolity_id = models.CharField(max_length=500, primary_key=True, db_index=True)
     name = models.CharField(max_length=500)
     compartment = models.CharField(max_length=500, null=True)
     notes = models.JSONField(null=True)
 
 
 class Pathway(TimeStampMixin):
-    id = models.AutoField(db_column='id', primary_key=True)
+    id = models.AutoField(db_column='id', primary_key=True, db_index=True)
     name = models.CharField(max_length=500, unique=True)
 
 
 class Disease(TimeStampMixin):
-    id = models.AutoField(db_column='id', primary_key=True)
-    disease_id = models.CharField(max_length=500, unique=True)
+    id = models.AutoField(db_column='id', primary_key=True, db_index=True)
+    disease_id = models.CharField(max_length=500, unique=True, db_index=True)
     name = models.CharField(max_length=500)
     type = models.CharField(max_length=500, null=True)
     class_of = models.CharField(max_length=500, null=True)
@@ -41,9 +42,9 @@ class Disease(TimeStampMixin):
 
 
 class Reaction(TimeStampMixin):
-    reaction_id = models.CharField(max_length=500, primary_key=True)
+    reaction_id = models.CharField(max_length=500, primary_key=True, db_index=True)
     name = models.CharField(max_length=500)
-    metabolities = models.ManyToManyField(Metabolity)
+    metabolities = models.ManyToManyField(Metabolity, db_index=True)
     notes = models.JSONField(null=True)
     lower_bound = models.FloatField()
     upper_bound = models.FloatField()
@@ -51,11 +52,15 @@ class Reaction(TimeStampMixin):
 
 
 class Article(TimeStampMixin):
+    id = models.AutoField(db_column='id', primary_key=True, db_index=True)
     abstract_text = models.CharField(max_length=20000, null=True)
     pub_date = models.DateField()
     name = models.CharField(max_length=500)
     doi = models.CharField(max_length=500, null=True)
-    authors = models.ManyToManyField(Author)
-    metabolities = models.ManyToManyField(Metabolity)
-    diseases = models.ManyToManyField(Disease)
-    pathways = models.ManyToManyField(Pathway)
+    authors = models.ManyToManyField(Author, db_index=True)
+    metabolities = models.ManyToManyField(Metabolity, db_index=True)
+    diseases = models.ManyToManyField(Disease, db_index=True)
+    pathways = models.ManyToManyField(Pathway, db_index=True)
+
+    class Meta:
+        ordering = ['-id']

@@ -4,28 +4,28 @@ from rest_framework import serializers
 from .models import Article, Author, Metabolity, Reaction, Disease, Pathway
 
 
-class AuthorSerializer(serializers.HyperlinkedModelSerializer):
+class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Author
-        fields = ["full_name", "first_name", "last_name", "initials", "url"]
+        fields = ["full_name", "first_name", "last_name", "initials"]
 
 
-class PathwaySerializer(serializers.HyperlinkedModelSerializer):
+class PathwaySerializer(serializers.ModelSerializer):
     class Meta:
         model = Pathway
-        fields = ['id', 'name', 'url']
+        fields = ['id', 'name']
 
 
-class DiseaseSerializer(serializers.HyperlinkedModelSerializer):
+class DiseaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Disease
-        fields = ['disease_id', 'name', 'type', 'class_of', "semantic_type", "url"]
+        fields = ['disease_id', 'name', 'type', 'class_of', "semantic_type"]
 
 
-class MetabolitySerializer(serializers.HyperlinkedModelSerializer):
+class MetabolitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Metabolity
-        fields = ['metabolity_id', 'name', 'compartment', 'notes', "url"]
+        fields = ['metabolity_id', 'name', 'compartment', 'notes']
 
 
 class MetabolitySerializerJustNameUrl(serializers.HyperlinkedModelSerializer):
@@ -34,23 +34,22 @@ class MetabolitySerializerJustNameUrl(serializers.HyperlinkedModelSerializer):
         fields = ['name', "url"]
 
 
-class ReactionSerializer(serializers.HyperlinkedModelSerializer):
+class ReactionSerializer(serializers.ModelSerializer):
     metabolities = MetabolitySerializerJustNameUrl(many=True, read_only=True)
 
     class Meta:
         model = Reaction
-        fields = ['reaction_id', 'name', 'metabolities', 'notes', 'lower_bound', 'upper_bound', 'gene_reaction_rule',
-                  "url"]
+        fields = ['reaction_id', 'name', 'metabolities', 'notes', 'lower_bound', 'upper_bound', 'gene_reaction_rule']
 
 
-class ArticleSerializer(serializers.HyperlinkedModelSerializer):
+class ArticleSerializer(serializers.ModelSerializer):
     authors = AuthorSerializer(many=True, read_only=True)
-    metabolities = MetabolitySerializer(many=True, read_only=True)
+    metabolities = MetabolitySerializerJustNameUrl(many=True, read_only=True)
     diseases = DiseaseSerializer(many=True, read_only=True)
 
     class Meta:
         model = Article
-        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', 'diseases', 'url']
+        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', 'diseases']
 
 
 class DiseasePathwaySearchSeriailizer(serializers.Serializer):
