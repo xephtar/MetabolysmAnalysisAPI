@@ -24,6 +24,7 @@ django-filter==2.4.0
 django-redis==5.0.0
 djangorestframework==3.12.4
 entrypoints==0.3
+gunicorn==20.1.0
 idna==2.10
 ipykernel==5.5.5
 ipython==7.22.0
