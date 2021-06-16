@@ -1,7 +1,7 @@
 # Create your views here.
 
 # ViewSets define the view behavior.
-from django.db.models import F
+from django.db.models import F, Q
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie
@@ -17,15 +17,20 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
+class SingleArticleViewSet(viewsets.ModelViewSet):
+    queryset = Article.objects.exclude(Q(annotations__isnull=False)).exclude(Q(abstract_text__exact='')).all()[:1]
+    serializer_class = ArticleSerializer
+
+
 class ArticleViewSet(viewsets.ModelViewSet):
     search_fields = ['abstract_text', 'diseases__name']
     filter_backends = (filters.SearchFilter,)
-    queryset = Article.objects.exclude(abstract_text__exact="").prefetch_related('metabolities', 'authors', 'diseases', 'pathways').all()
+    queryset = Article.objects.prefetch_related('metabolities', 'authors', 'diseases', 'pathways').all()
     serializer_class = ArticleSerializer
 
-    @method_decorator(cache_page(CACHE_TTL))
-    def list(self, *args, **kwargs):
-        return super().list(*args, **kwargs)
+    #@method_decorator(cache_page(CACHE_TTL))
+    #def list(self, *args, **kwargs):
+    #    return super().list(*args, **kwargs)
 
 
 class AuthorViewSet(viewsets.ModelViewSet):

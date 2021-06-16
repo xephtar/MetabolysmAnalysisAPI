@@ -61,6 +61,7 @@ class Article(TimeStampMixin):
     metabolities = models.ManyToManyField(Metabolity, db_index=True)
     diseases = models.ManyToManyField(Disease, db_index=True)
     pathways = models.ManyToManyField(Pathway, db_index=True)
+    annotations = models.JSONField(blank=True, null=True)
 
     class Meta:
         ordering = ['-id']

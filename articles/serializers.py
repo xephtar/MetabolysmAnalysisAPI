@@ -49,7 +49,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Article
-        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', 'diseases']
+        fields = ['id', 'name', 'abstract_text', 'pub_date', 'doi', 'authors', 'metabolities', 'diseases', 'annotations']
 
 
 class DiseasePathwaySearchSeriailizer(serializers.Serializer):
