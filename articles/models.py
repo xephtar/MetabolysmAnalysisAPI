@@ -65,3 +65,46 @@ class Article(TimeStampMixin):
 
     class Meta:
         ordering = ['-id']
+
+
+class PathwayDiseaseRelation(models.Model):
+    id = models.AutoField(db_column='id', primary_key=True, db_index=True)
+    pathway_name = models.CharField(max_length=500, db_index=True)
+    disease_name = models.CharField(max_length=500, db_index=True)
+    article_id = models.IntegerField(blank=True, null=True)
+    sia_score = models.FloatField(null=True)
+    textblob_polarity = models.FloatField(null=True)
+    textblob_subjectivity = models.FloatField(null=True)
+    flair_score = models.FloatField(null=True)
+    sentence = models.CharField(max_length=5000, null=True, db_index=True)
+
+    class Meta:
+        ordering = ['pathway_name']
+        db_table = 'pathway_disease_relation'
+        indexes = [
+            models.Index(fields=['pathway_name', 'disease_name', 'article_id', 'sentence']),
+        ]
+        index_together = [
+            ["pathway_name", "disease_name", "article_id", "sentence"],
+        ]
+        unique_together = [['pathway_name', 'disease_name', 'article_id', 'sentence']]
+
+
+class EvidenceReport(models.Model):
+    pathway_name = models.CharField(max_length=500)
+    disease_name = models.CharField(max_length=500)
+    evidence_count = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'evidencereport'
+
+
+class EvidenceDetail(models.Model):
+    pathway_name = models.CharField(max_length=500)
+    disease_name = models.CharField(max_length=500)
+    total_count = models.IntegerField()
+    analyzer_type = models.CharField(max_length=500)
+
+    class Meta:
+        managed = False

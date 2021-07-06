@@ -10,11 +10,6 @@ DATABASE_PASSWORD = config('DATABASE_PASSWORD')
 
 conn_str = "host=manny.db.elephantsql.com dbname={} user={} password={}".format(DATABASE_NAME, DATABASE_NAME,
                                                                                 DATABASE_PASSWORD)
-articleNum = 0
-meshNum = 0
-diseaseNum = 0
-
-
 def stripString(name):
     """Strip string from redundant spaces and newlines."""
     return " ".join(name.split())
@@ -63,28 +58,22 @@ class MeshHandler(xml.sax.ContentHandler):
 
     # Call when an elements ends
     def endElement(self, tag):
-        global articleNum
         # self.CurrentData = tag
         if tag == "PubmedArticle":
             self.inPubmedArticle = 0
-            now = datetime.datetime.now()
             now = datetime.datetime.now()
             year = '{:02d}'.format(now.year)
             month = '{:02d}'.format(now.month)
             day = '{:02d}'.format(now.day)
             day_month_year = '{}-{}-{}'.format(year, month, day)
-            print(articleNum)
             self.c.execute(
                 "INSERT INTO articles_article (abstract_text, pub_date, name, doi, created_at, updated_at, is_active) VALUES(%s, %s,%s, %s, %s, %s, true)",
                 (self.AbstractText, self.PubDate, self.ArticleTitle, self.doi, day_month_year, day_month_year))
             self.conn.commit()
-
-            print('#################\n')
             self.ArticleTitle = ''
             self.doi = ''
             self.AbstractText = ''
             self.PubDate = ''
-            articleNum += 1
 
         elif tag == "ArticleTitle":
             self.inArticleTitle = 0

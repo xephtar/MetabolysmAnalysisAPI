@@ -2,7 +2,7 @@ import requests
 import xmltodict, json
 from articles.models import Article, Author
 
-url = "https://www.ebi.ac.uk/europepmc/webservices/rest/searchPOST?query=cancer&resultType=core&pageSize=1000"
+url = "https://www.ebi.ac.uk/europepmc/webservices/rest/searchPOST?query=cancer&resultType=core&format=json&pageSize=100"
 
 payload = {}
 files = {}
@@ -22,8 +22,7 @@ for m in o['responseWrapper']['resultList']['result']:
     try:
         if 'abstractText' in m.keys():
             if 'doi' in m.keys():
-                ar = Article.objects.get_or_create(abstract_text=m['abstractText'], pub_date=m['firstPublicationDate'],
-                                                   name=m['title'], doi=m['doi'])
+                c
             else:
                 ar = Article.objects.get_or_create(abstract_text=m['abstractText'], pub_date=m['firstPublicationDate'],
                                                    name=m['title'])
