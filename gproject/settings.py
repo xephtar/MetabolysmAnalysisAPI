@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'n!)#t^92oq9f06%fzwl68qdnm*ran39i17m^vu5hm^@(oy^eg4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG', False)
+DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['*']
 
@@ -86,10 +86,10 @@ WSGI_APPLICATION = 'gproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-#from decouple import config
+from decouple import config
 
-#DATABASE_NAME = config('DATABASE_NAME')
-#DATABASE_PASSWORD = config('DATABASE_PASSWORD')
+DATABASE_NAME = config('DATABASE_NAME')
+DATABASE_PASSWORD = config('DATABASE_PASSWORD')
 
 DATABASES = {
 
@@ -97,11 +97,11 @@ DATABASES = {
 
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
 
-        'NAME': os.environ.get('DATABASE_NAME'),
+        'NAME': DATABASE_NAME,
 
-        'USER': os.environ.get('DATABASE_NAME'),
+        'USER': DATABASE_NAME,
 
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'PASSWORD': DATABASE_PASSWORD,
 
         'HOST': 'manny.db.elephantsql.com',
 
@@ -190,16 +190,16 @@ if DEBUG:
 #     }
 # }
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": os.environ.get('REDIS_URL'),
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient"
-#         },
-#         "KEY_PREFIX": "article"
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        "KEY_PREFIX": "article"
+    }
+}
 
 CACHE_TTL = 60 * 60 * 24
 django_heroku.settings(locals())
